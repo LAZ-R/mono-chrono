@@ -1,0 +1,137 @@
+@import url("../../../css/root.css");
+
+/* Put here any 'index.html' specific css */
+@import url(https://fonts.googleapis.com/css?family=Righteous);
+
+.top-content {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--horizontal-padding) var(--horizontal-padding);
+    height: 33vh;
+    background-color: var(--gray-70);
+    color: white;
+}
+
+.top-tab {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    width: 100%;
+}
+
+.top-tab-row {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.new-type-button {
+    box-sizing: border-box;
+    height: 20vh;
+    background-color: white;
+    color: var(--primary);
+}
+    .new-type-button:hover {
+        background-color: var(--gray-10);
+    }
+
+.new-session-button {
+    box-sizing: border-box;
+    height: 33vh;
+    background-color: var(--primary);
+    color: white;
+}
+    .new-session-button:hover {
+        background-color: var(--primary-hover);
+    }
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-button-text {
+    font-weight: 600;
+    background: var(--linear-gradient);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.special-animated {
+    text-transform: uppercase;
+	letter-spacing: .5em;
+	display: inline-block;
+	padding: 0 0;
+	position: relative;
+	width: fit-content;
+	margin: 0 0;
+}
+
+.glowing-text-bright {
+    font: 700 40px "Righteous", sans-serif;
+    display: block;
+    letter-spacing: 0;
+    padding: 0 0;
+    margin: 0 0;  
+    background: url('../../../images/glowing-text-bright.png') repeat-y;
+    -webkit-background-clip: text;
+    background-clip: text;
+  
+  /* Animate Background Image */
+  
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: aitf 60s linear infinite;
+  
+  /* Activate hardware acceleration for smoother animations */
+  
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+  
+}
+
+.glowing-text-dark {
+    font: 700 40px "Righteous", sans-serif;
+    display: block;
+    letter-spacing: 0;
+    padding: 0 0;
+    margin: 0 0;  
+    background: url('../../../images/glowing-text-dark.png') repeat-y;
+    -webkit-background-clip: text;
+    background-clip: text;
+  
+  /* Animate Background Image */
+  
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: aitf 60s linear infinite;
+  
+  /* Activate hardware acceleration for smoother animations */
+  
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+  
+}
+  
+/* Animate Background Image */
+
+@-webkit-keyframes aitf {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
