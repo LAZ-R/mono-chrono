@@ -161,6 +161,60 @@ export const getSessions = () => {
     return User.sessions;
 }
 
+export const getSessionByID = (sessionId) => {
+    const User = JSON.parse(STORAGE.getItem('monoChronoUser'));
+    let sessionToReturn;
+    User.sessions.forEach(session => {
+        if (session.id == sessionId) {
+            if (session.total_time == null) {
+                let type = getTypeById(session.type);
+
+                let total_time = 0;
+                let average_time = 0;
+                let average_speed = 0;
+                let best_time = 0;
+                let best_speed = null;
+            
+                session.laps.forEach(lap => {
+                    total_time += lap.time;
+                    if (best_time == 0) {
+                        best_time = lap.time;
+                    } else {
+                        if (lap.time < best_time) {
+                            best_time = lap.time;
+                        }
+                    }
+                });
+            
+                average_time = total_time / session.laps.length;
+                average_speed = (type.lap_length / 1000) / (average_time / 3600);
+                best_speed = (type.lap_length / 1000) / (best_time / 3600);
+            
+                session.total_time = roundTo(total_time, 2);
+                session.average_time = roundTo(average_time, 2);
+                session.average_speed = roundTo(average_speed, 2);
+                session.best_time = roundTo(best_time, 2);
+                session.best_speed = roundTo(best_speed, 2);
+
+                sessionToReturn = session;
+            }
+        }
+    });
+    return sessionToReturn;
+}
+
+export const getSessionsByType = (typeId) => {
+    const allSessions = getSessions();
+    const sessionsToReturn = [];
+
+    allSessions.forEach(session => {
+        if (session.id == typeId) {
+            sessionsToReturn.push(session);        }
+    });
+
+    return sessionsToReturn;
+}
+
 export const addSession = (sessionToAdd) => {
     let User = JSON.parse(STORAGE.getItem('monoChronoUser'));
 

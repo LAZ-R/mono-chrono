@@ -16,19 +16,25 @@ const renderView = () => {
     const topContent = document.createElement('div');
     topContent.setAttribute('id', 'topContent');
     topContent.setAttribute('class', 'top-content');
+
+    const types = SERVICE_STORAGE.getTypes();
+    const previousSessions = SERVICE_STORAGE.getSessions();
     topContent.innerHTML =
     '<span><b>' + pageTitle + '</b></span>' +
         '<div class="top-tab">' +
-            '<span class="top-tab-row"><span>Types de session</span><span>3</span></span>' +
-            '<span class="top-tab-row"><span>Sessions précédentes</span><span>44</span></span>' +
+            '<span class="top-tab-row"><span>Types de session</span><span>' + types.length + '</span></span>' +
+            '<span class="top-tab-row"><span>Sessions précédentes</span><span>' + previousSessions.length + '</span></span>' +
         '</div>'
 
-    const previousSessions = document.createElement('button');
-    previousSessions.setAttribute('id', 'previousSessions');
-    previousSessions.setAttribute('class', '');
-    previousSessions.innerHTML = 'Sessions précedentes';
+    const previousSessionsButton = document.createElement('button');
+    previousSessionsButton.setAttribute('id', 'previousSessionsButton');
+    previousSessionsButton.setAttribute('class', '');
+    previousSessionsButton.innerHTML = 'Sessions précedentes';
+    previousSessionsButton.addEventListener('click', () => {
+        window.open('./previousSessions.html', '_self');
+    });
 
-    topContent.appendChild(previousSessions);
+    topContent.appendChild(previousSessionsButton);
 
     page.appendChild(topContent);
 
