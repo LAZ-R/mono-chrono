@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     width: 90%;
-    height: 200px;
+    height: 150px;
     border-radius: 10px;
     box-shadow: #00000035 0 10px 20px;
     font-family: Roboto-Bold;
@@ -50,7 +50,7 @@
     align-items: center;
     height: fit-content;
     width: 100%;
-    margin: 10px 0;
+    margin-bottom: 5px;
 }
 
 .type-title {

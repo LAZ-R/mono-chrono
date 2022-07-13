@@ -20,7 +20,6 @@ const renderView = () => {
     const types = SERVICE_STORAGE.getTypes();
     const previousSessions = SERVICE_STORAGE.getSessions();
     topContent.innerHTML =
-    '<span><b>' + pageTitle + '</b></span>' +
         '<div class="top-tab">' +
             '<span class="top-tab-row"><span>Types de session</span><span>' + types.length + '</span></span>' +
             '<span class="top-tab-row"><span>Sessions précédentes</span><span>' + previousSessions.length + '</span></span>' +

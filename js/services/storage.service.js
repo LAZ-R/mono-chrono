@@ -1,3 +1,5 @@
+import * as UTILS from './utils.service.js'
+
 export const STORAGE = localStorage;
 
 export const checkFirstTime = () => {
@@ -5,6 +7,7 @@ export const checkFirstTime = () => {
 
     if (firstTime === null) {
         STORAGE.setItem('monoChronoFirstTime', '0');
+
         let userTmp = {
             types: [{
                 id: 1,
@@ -49,40 +52,16 @@ export const checkFirstTime = () => {
             }]
         };
         STORAGE.setItem('monoChronoUser', JSON.stringify(userTmp));
-        let type1 =  {
+        let type2 = {
             id: 2,
-            total_distance: 10000,
-            lap_length: 400
-        };
-        let session1 = {
+            total_distance: 42195,
+            lap_length: 42195
+        }
+        let session2 = {
             id: 2,
-            type: 1,
+            type: 2,
             laps:[
-                {  id:  1, time: 75.95 },
-                {  id:  2, time: 75.65 },
-                {  id:  3, time: 74.78 },
-                {  id:  4, time: 72.39 },
-                {  id:  5, time: 74.67 },
-                {  id:  6, time: 73.29 },
-                {  id:  7, time: 70.42 },
-                {  id:  8, time: 75.95 },
-                {  id:  9, time: 72.30 },
-                {  id: 10, time: 72.43 },
-                {  id: 11, time: 72.26 },
-                {  id: 12, time: 72.16 },
-                {  id: 13, time: 70.66 },
-                {  id: 14, time: 72.50 },
-                {  id: 15, time: 70.86 },
-                {  id: 16, time: 70.60 },
-                {  id: 17, time: 70.99 },
-                {  id: 18, time: 70.30 },
-                {  id: 19, time: 72.38 },
-                {  id: 20, time: 71.00 },
-                {  id: 21, time: 71.19 },
-                {  id: 22, time: 71.49 },
-                {  id: 23, time: 69.19 },
-                {  id: 24, time: 67.85 },
-                {  id: 25, time: 67.14 }
+                {  id:  1, time: 9144.89 }
             ],
             total_time: null,
             average_time: null,
@@ -90,8 +69,8 @@ export const checkFirstTime = () => {
             best_time: null,
             best_speed: null
         };
-        addType(type1);
-        addSession(session1);
+        addType(type2);
+        addSession(session2);
     }
 }
 
@@ -101,7 +80,7 @@ export const getTypes = () => {
 }
 
 export const getTypeById = (typeId) => {
-    let typeReturn;
+    let typeReturn = {};
     const User = JSON.parse(STORAGE.getItem('monoChronoUser'));
 
     User.types.forEach(type => {
@@ -109,7 +88,19 @@ export const getTypeById = (typeId) => {
             typeReturn = type;
         }
     });
+
     return typeReturn;
+}
+
+export const getTypesLatestId = () => {
+    let idReturn = 0;
+    const User = JSON.parse(STORAGE.getItem('monoChronoUser'));
+
+    User.types.forEach(type => {
+        idReturn = type.id;
+    });
+
+    return idReturn;
 }
 
 export const addType = (typeToAdd) => {
@@ -125,9 +116,10 @@ export const addType = (typeToAdd) => {
 }
 
 export const getSessions = () => {
+    let sessionsToReturn = [];
     const User = JSON.parse(STORAGE.getItem('monoChronoUser'));
     User.sessions.forEach(session => {
-        if (session.total_time == null) {
+
             let type = getTypeById(session.type);
 
             let total_time = 0;
@@ -156,9 +148,10 @@ export const getSessions = () => {
             session.average_speed = roundTo(average_speed, 2);
             session.best_time = roundTo(best_time, 2);
             session.best_speed = roundTo(best_speed, 2);
-        }
+
+            sessionsToReturn.push(session);
     });
-    return User.sessions;
+    return sessionsToReturn;
 }
 
 export const getSessionByID = (sessionId) => {
@@ -167,36 +160,9 @@ export const getSessionByID = (sessionId) => {
     User.sessions.forEach(session => {
         if (session.id == sessionId) {
             if (session.total_time == null) {
-                let type = getTypeById(session.type);
 
-                let total_time = 0;
-                let average_time = 0;
-                let average_speed = 0;
-                let best_time = 0;
-                let best_speed = null;
-            
-                session.laps.forEach(lap => {
-                    total_time += lap.time;
-                    if (best_time == 0) {
-                        best_time = lap.time;
-                    } else {
-                        if (lap.time < best_time) {
-                            best_time = lap.time;
-                        }
-                    }
-                });
-            
-                average_time = total_time / session.laps.length;
-                average_speed = (type.lap_length / 1000) / (average_time / 3600);
-                best_speed = (type.lap_length / 1000) / (best_time / 3600);
-            
-                session.total_time = roundTo(total_time, 2);
-                session.average_time = roundTo(average_time, 2);
-                session.average_speed = roundTo(average_speed, 2);
-                session.best_time = roundTo(best_time, 2);
-                session.best_speed = roundTo(best_speed, 2);
-
-                sessionToReturn = session;
+                sessionToReturn =  UTILS.calculateSessionStats(session)
+                
             }
         }
     });
@@ -208,7 +174,7 @@ export const getSessionsByType = (typeId) => {
     const sessionsToReturn = [];
 
     allSessions.forEach(session => {
-        if (session.id == typeId) {
+        if (session.type == typeId) {
             sessionsToReturn.push(session);        }
     });
 
@@ -217,42 +183,12 @@ export const getSessionsByType = (typeId) => {
 
 export const addSession = (sessionToAdd) => {
     let User = JSON.parse(STORAGE.getItem('monoChronoUser'));
-
-    let type = getTypeById(sessionToAdd.type);
-
-    let total_time = 0;
-    let average_time = 0;
-    let average_speed = 0;
-    let best_time = 0;
-    let best_speed = null;
-
-    sessionToAdd.laps.forEach(lap => {
-        total_time += lap.time;
-        if (best_time == null) {
-            best_time = lap.time;
-        } else {
-            if (lap.time < best_time) {
-                best_time = lap.time;
-            }
-        }
-    });
-
-    average_time = total_time / sessionToAdd.laps.length;
-    average_speed = (type.lap_length * 1000) / (average_time * 3600);
-    best_speed = (type.lap_length * 1000) / (best_time * 3600);
-
-    sessionToAdd.total_time = total_time;
-    sessionToAdd.average_time = average_time;
-    sessionToAdd.average_speed = average_speed;
-    sessionToAdd.best_time = best_time;
-    sessionToAdd.best_speed = best_speed;
-
     let tmpArray = [];
     User.sessions.forEach(session => {
         tmpArray.push(session);
     });
     tmpArray.push(sessionToAdd);
-    User.sessions = sessionsList;
+    User.sessions = tmpArray;
     STORAGE.setItem('monoChronoUser', JSON.stringify(User));
 }
 

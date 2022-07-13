@@ -120,6 +120,39 @@ main {
     min-height: 86vh;
 }
 
+form {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    padding: var(--horizontal-padding) 0 0 0;
+    background-color: var(--gray-10);
+}
+
+.form-row {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 var(--horizontal-padding);
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.form-submit-row {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 0;
+    width: 100%;
+    margin-top: 10px;
+}
+
 /* ==========================
 TEXT
 ========================== */
@@ -185,6 +218,35 @@ button {
     margin: 0 0;
     border-radius: 0;
     width: 100%;
+}
+
+/* ==========================
+INPUTS
+========================== */
+input[type=submit] {
+    font: 400 40px "Righteous", sans-serif;
+    border: none;
+    background-color: var(--primary);
+    padding: 15px 0;
+    border-radius: 0;
+    margin: 0 0;
+    flex-wrap: wrap;
+    color: #ffffff;
+    width: 100%;
+}
+
+input[type=number] {
+    font: 400 25px "Righteous", sans-serif;
+    border: 1px solid var(--gray-30);
+    background-color: #ffffff;
+    padding: 5px 15px;
+    border-radius: 0;
+    margin: 0 0;
+    flex-wrap: wrap;
+    color: var(--primary);
+    width: 30%;
+    height: fit-content;
+    text-align: end;
 }
 
 /* ==========================

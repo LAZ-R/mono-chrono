@@ -13,8 +13,6 @@ const renderView = () => {
 
     let pageTitle = '';
     
-    
-    
     const page = document.createElement('div');
     page.setAttribute('id', 'page');
     page.setAttribute('class', 'page');
@@ -33,17 +31,22 @@ const renderView = () => {
         types.forEach(type => {
             itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('type', type, './previousSessions.html?type=' + type.id));
         });
+        itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('blank', null, './newType.html'));
+
+
+
     } else if (typeId != null && sessionId == null) {
         const type = SERVICE_STORAGE.getTypeById(typeId);
-        let total_distance = type.total_distance >= 1000 ?
-            UTILS.roundTo((type.total_distance)/1000, 2) + ' km'
-            : type.total_distance + ' m';
-
-        let lap_length = type.lap_length >= 1000 ?
-            UTILS.roundTo((type.lap_length)/1000, 2) + ' km'
-            : type.lap_length + ' m';
-
-        pageTitle = total_distance + ' | ' + parseInt(type.total_distance) / parseInt(type.lap_length) + ' x ' + lap_length;
+        let total_distance = UTILS.getStringFromDistance(type.total_distance);
+        let lap_length;
+        if (UTILS.isSprint(type)) {
+            lap_length = 'Sprint';
+            pageTitle = total_distance + ' | ' + lap_length;
+        } else {
+            lap_length = UTILS.getStringFromDistance(type.lap_length);
+            pageTitle = total_distance + ' | ' + Math.ceil(parseInt(type.total_distance) / parseInt(type.lap_length)) + ' x ' + lap_length;
+        }
+        
         SERVICE_PWA.setHTMLTitle(pageTitle);
         page.appendChild(document.createElement('h1')).innerHTML =
             pageTitle;
@@ -53,8 +56,16 @@ const renderView = () => {
 
         const sessions = SERVICE_STORAGE.getSessionsByType(typeId);
         sessions.forEach(session => {
-            itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('session', session, './previousSessions.html?session=' + session.id));
+            if (UTILS.isSprint(type)) {
+                itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('sessionSprint', session, './previousSessions.html?session=' + session.id));
+            } else {
+                itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('session', session, './previousSessions.html?session=' + session.id));
+            }
         });
+        itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('blank', null, './newSession.html?type=' + typeId));
+
+
+
     } else if (typeId == null && sessionId != null) {
         pageTitle = 'Session ' + sessionId;
         SERVICE_PWA.setHTMLTitle(pageTitle);
@@ -63,9 +74,7 @@ const renderView = () => {
 
         const session = SERVICE_STORAGE.getSessionByID(sessionId);
 
-        let total_distance = SERVICE_STORAGE.getTypeById(session.type).total_distance >= 1000 ?
-            UTILS.roundTo((SERVICE_STORAGE.getTypeById(session.type).total_distance)/1000, 2) + ' km'
-            : SERVICE_STORAGE.getTypeById(session.type).total_distance + ' m';
+        let total_distance = UTILS.getStringFromDistance(SERVICE_STORAGE.getTypeById(session.type).total_distance);
         let total_time = UTILS.secondsToFormatedTimeString(session.total_time);
         let average_time = UTILS.secondsToFormatedTimeString(session.average_time);
         let best_time = UTILS.secondsToFormatedTimeString(session.best_time);

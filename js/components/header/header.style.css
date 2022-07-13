@@ -15,6 +15,7 @@ header {
     width: 100%;
     height: var(--header-height);
     background-color: var(--primary);
+    z-index: 1;
 }
 
 /**

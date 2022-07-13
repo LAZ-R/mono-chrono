@@ -3,22 +3,23 @@ import * as UTILS from '../../services/utils.service.js';
 export const render = (itemType, item, route) => {
     switch (itemType) {
         case 'type':
-            let total_distance = item.total_distance >= 1000 ?
-            UTILS.roundTo((item.total_distance)/1000, 2) + ' km'
-            : item.total_distance + ' m';
-
-            let lap_length = item.lap_length >= 1000 ?
-            UTILS.roundTo((item.lap_length)/1000, 2) + ' km'
-            : item.lap_length + ' m';
+            let total_distance = UTILS.getStringFromDistance(item.total_distance);
+            let lap_length;
+            UTILS.isSprint(item) ? lap_length = 'Sprint' : lap_length = UTILS.getStringFromDistance(item.lap_length);
 
             const itemPadType = document.createElement('a');
             itemPadType.setAttribute('class', 'item-pad');
             itemPadType.setAttribute('href', route);
+            UTILS.isSprint(item) ?
             itemPadType.innerHTML = 
                 '<span class="item-pad-title glowing-text-dark type-title">' + total_distance + '</span>' +
-                '<span class="item-pad-title glowing-text-dark type-title">' + parseInt(item.total_distance) / parseInt(item.lap_length) + ' x ' + lap_length + '</span>';
+                '<span class="item-pad-title glowing-text-dark type-title">' + lap_length + '</span>'
+            : itemPadType.innerHTML = 
+                '<span class="item-pad-title glowing-text-dark type-title">' + total_distance + '</span>' +
+                '<span class="item-pad-title glowing-text-dark type-title">' + Math.ceil(parseInt(item.total_distance) / parseInt(item.lap_length)) + ' x ' + lap_length + '</span>';
 
             return itemPadType;
+
         case 'session':
             let total_time = UTILS.secondsToFormatedTimeString(item.total_time);
             let average_time = UTILS.secondsToFormatedTimeString(item.average_time);
@@ -34,6 +35,27 @@ export const render = (itemType, item, route) => {
                 '<span class="item-pad-title session-title"><span>Meilleur : </span><span>' + best_time + '</span></span>';
 
             return itemPadSession;
+
+        case 'sessionSprint':
+            let total_time_sprint = UTILS.secondsToFormatedTimeString(item.total_time);
+
+            const itemPadSessionSprint = document.createElement('a');
+            itemPadSessionSprint.setAttribute('class', 'item-pad');
+            itemPadSessionSprint.setAttribute('href', route);
+            itemPadSessionSprint.innerHTML = 
+            '<span class="item-pad-title type-title"><span class="glowing-text-dark">SESSION ' + item.id + '<br>' + total_time_sprint + '</span></span>';
+
+            return itemPadSessionSprint;
+
+        case 'blank':
+            const itemPadBlank = document.createElement('a');
+            itemPadBlank.setAttribute('class', 'item-pad');
+            itemPadBlank.setAttribute('href', route);
+            itemPadBlank.innerHTML = 
+            '<span class="item-pad-title session-title"><span></span><span>VIDE</span><span></span></span>' +
+            '<span class="item-pad-title type-title"><span class="glowing-text-dark">+</span></span>';
+
+            return itemPadBlank;
     
         default:
             const itemPad = document.createElement('a');

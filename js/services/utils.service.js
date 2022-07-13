@@ -1,3 +1,5 @@
+import * as SERVICE_STORAGE from './storage.service.js'
+
 export const roundTo = (n, digits) => {
     var negative = false;
     if (digits === undefined) {
@@ -39,3 +41,44 @@ export const secondsToFormatedTimeString = (time) => {
 
     return final_time
 }
+
+export const calculateSessionStats = (session) => {
+    let type = SERVICE_STORAGE.getTypeById(session.type);
+
+    let total_time = 0;
+    let average_time = 0;
+    let average_speed = 0;
+    let best_time = 0;
+    let best_speed = null;
+
+    session.laps.forEach(lap => {
+        total_time += lap.time;
+        if (best_time == 0) {
+            best_time = lap.time;
+        } else {
+            if (lap.time < best_time) {
+                best_time = lap.time;
+            }
+        }
+    });
+
+    average_time = total_time / session.laps.length;
+    average_speed = (type.lap_length / 1000) / (average_time / 3600);
+    best_speed = (type.lap_length / 1000) / (best_time / 3600);
+
+    session.total_time = roundTo(total_time, 2);
+    session.average_time = roundTo(average_time, 2);
+    session.average_speed = roundTo(average_speed, 2);
+    session.best_time = roundTo(best_time, 2);
+    session.best_speed = roundTo(best_speed, 2);
+
+    return session;
+}
+
+export const getStringFromDistance = (distance) => {
+    return distance >= 1000 ?
+    roundTo((distance)/1000, 3) + ' km'
+    : distance + ' m';
+}
+
+export const isSprint = (type) => type.lap_length == type.total_distance ;
