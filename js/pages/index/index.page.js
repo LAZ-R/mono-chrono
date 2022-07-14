@@ -60,6 +60,9 @@ const renderView = () => {
             'Nouvelle<br>Session' +
         '</span>' +
     '</p>';
+    newSession.addEventListener('click', () => {
+        window.open('./newSession.html', '_self');
+    });
     
     page.appendChild(newSession);
     

@@ -28,7 +28,7 @@ const renderView = () => {
         page.appendChild(itemsGridContainer);
 
         const types = SERVICE_STORAGE.getTypes();
-        types.forEach(type => {
+        types.slice().reverse().forEach(type => {
             itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('type', type, './previousSessions.html?type=' + type.id));
         });
         itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('blank', null, './newType.html'));
@@ -55,7 +55,7 @@ const renderView = () => {
         page.appendChild(itemsGridContainer);
 
         const sessions = SERVICE_STORAGE.getSessionsByType(typeId);
-        sessions.forEach(session => {
+        sessions.slice().reverse().forEach(session => {
             if (UTILS.isSprint(type)) {
                 itemsGridContainer.appendChild(COMPONENT_ITEM_PAD.render('sessionSprint', session, './previousSessions.html?session=' + session.id));
             } else {
@@ -69,22 +69,39 @@ const renderView = () => {
     } else if (typeId == null && sessionId != null) {
         pageTitle = 'Session ' + sessionId;
         SERVICE_PWA.setHTMLTitle(pageTitle);
+        
         page.appendChild(document.createElement('h1')).innerHTML =
             pageTitle;
 
         const session = SERVICE_STORAGE.getSessionByID(sessionId);
+        const TYPE = SERVICE_STORAGE.getTypeById(session.type);
 
-        let total_distance = UTILS.getStringFromDistance(SERVICE_STORAGE.getTypeById(session.type).total_distance);
+        let total_distance = UTILS.getStringFromDistance(TYPE.total_distance);
         let total_time = UTILS.secondsToFormatedTimeString(session.total_time);
         let average_time = UTILS.secondsToFormatedTimeString(session.average_time);
         let best_time = UTILS.secondsToFormatedTimeString(session.best_time);
-            
-        page.appendChild(document.createElement('div')).innerHTML =
+
+        const IS_SPRINT = UTILS.isSprint(TYPE);
+
+        if (IS_SPRINT) {
+            page.appendChild(document.createElement('div')).innerHTML =
+            '<div class="top-tab-session">' +
+                '<span class="top-tab-row-session"><span><b>Type</b></span><span></span></span>' +
+                '<span class="top-tab-row-session"><span>Distance totale</span><span>' + total_distance + '</span></span>' +
+                '<span class="top-tab-row-session"><span>Sprint</span><span></span></span>' +
+                '<div class="top-tab-separator"></div>' +
+                '<span class="top-tab-row-session"><span><b>Session</b></span><span></span></span>' +
+                '<span class="top-tab-row-session"><span>Temps total</span><span>' + total_time + '</span></span>' +
+                '<div class="top-tab-separator"></div>' +
+                '<span class="top-tab-row-session"><span>Vitesse moyenne</span><span>' + session.average_speed + ' km/h</span></span>' +
+            '</div>';
+        } else {
+            page.appendChild(document.createElement('div')).innerHTML =
             '<div class="top-tab-session">' +
                 '<span class="top-tab-row-session"><span><b>Type</b></span><span></span></span>' +
                 '<span class="top-tab-row-session"><span>Distance totale</span><span>' + total_distance + '</span></span>' +
                 '<span class="top-tab-row-session"><span>Nombre de tours</span><span>' + session.laps.length + '</span></span>' +
-                '<span class="top-tab-row-session"><span>Longueur du tour</span><span>' + SERVICE_STORAGE.getTypeById(session.type).lap_length + ' m</span></span>' +
+                '<span class="top-tab-row-session"><span>Longueur du tour</span><span>' + TYPE.lap_length + ' m</span></span>' +
                 '<div class="top-tab-separator"></div>' +
                 '<span class="top-tab-row-session"><span><b>Session</b></span><span></span></span>' +
                 '<span class="top-tab-row-session"><span>Temps total</span><span>' + total_time + '</span></span>' +
@@ -109,7 +126,8 @@ const renderView = () => {
         });
 
         page.appendChild(lapsArea);
-        
+
+        }
     }
     
     

@@ -12,7 +12,6 @@ const renderView = () => {
     let lapLength = new URLSearchParams(window.location.search).get('lapLength');
 
     if (totalDistance != null && lapLength != null) {
-        lapLength == undefined ? console.log('is undefined') : console.log('is not undefined');
         if (lapLength == "" ) lapLength = totalDistance
         const nextId = SERVICE_STORAGE.getTypesLatestId() + 1;
         const typeToAdd = {
@@ -29,11 +28,10 @@ const renderView = () => {
     const page = document.createElement('div');
     page.setAttribute('id', 'page');
     page.setAttribute('class', 'page');
-    page.appendChild(document.createElement('h1')).innerHTML =
-        pageTitle;
     
     const form = 
     '<form>' +
+        '<span class="form-title">' + pageTitle + '</span>' +
         '<div class="form-row">' +
             '<label for="totalDistance"><b>Distance totale</b><br>en mètres</label>' +
             '<input type="number" name="totalDistance" id="totalDistanceInput" required>' +
@@ -43,7 +41,7 @@ const renderView = () => {
             '<input type="number" name="lapLength" id="lapLengthInput" >' +
         '</div>' +
         '<div class="form-submit-row">' +
-            '<input type="submit" value="Valider !">' +
+            '<input type="submit" value="CRÉER !" class="vh-50-button">' +
         '</div>' +
     '</form>';
 

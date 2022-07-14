@@ -109,7 +109,6 @@ main {
     width: 100%;
     margin: 0 0;
     margin-top: var(--header-height);
-    margin-bottom: var(--footer-height);
     padding: 0 0;
 }
 
@@ -117,7 +116,7 @@ main {
     box-sizing: border-box;
     width: 100%;
     padding: 0 0;
-    min-height: 86vh;
+    min-height: 92vh;
 }
 
 form {
@@ -126,9 +125,19 @@ form {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 100%;
+    max-width: 100vw;
+    height: 92vh;
     padding: var(--horizontal-padding) 0 0 0;
     background-color: var(--gray-10);
+}
+
+.form-title {
+    box-sizing: border-box;
+    padding: 0 var(--horizontal-padding);
+    width: 100%;
+    max-width: 100vw;
+    font: 700 25px "Roboto-Regular", sans-serif;
+    margin-bottom: 30px;
 }
 
 .form-row {
@@ -136,11 +145,18 @@ form {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 0 var(--horizontal-padding);
     margin-bottom: 10px;
     width: 100%;
+    max-width: 100vw;
+    height: fit-content;
+    margin-bottom: auto;
 }
+
+/* form .form-row:last-of-type {
+    margin-bottom: auto;
+} */
 
 .form-submit-row {
     box-sizing: border-box;
@@ -150,6 +166,7 @@ form {
     align-items: flex-start;
     padding: 0 0;
     width: 100%;
+    max-width: 100vw;
     margin-top: 10px;
 }
 
@@ -220,6 +237,11 @@ button {
     width: 100%;
 }
 
+.vh-50-button {
+    height: 50vh;
+    max-width: 100vw;
+}
+
 /* ==========================
 INPUTS
 ========================== */
@@ -247,6 +269,15 @@ input[type=number] {
     width: 30%;
     height: fit-content;
     text-align: end;
+}
+
+select {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 0;
+    margin: 0 0;
+    border: 1px solid var(--gray-30);
+    font: 400 14px "Righteous", sans-serif;
 }
 
 /* ==========================

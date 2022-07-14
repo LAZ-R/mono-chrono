@@ -12,11 +12,11 @@ export const render = (itemType, item, route) => {
             itemPadType.setAttribute('href', route);
             UTILS.isSprint(item) ?
             itemPadType.innerHTML = 
-                '<span class="item-pad-title glowing-text-dark type-title">' + total_distance + '</span>' +
-                '<span class="item-pad-title glowing-text-dark type-title">' + lap_length + '</span>'
+                '<span class="item-pad-title glowing-text-dark">' + total_distance + '</span>' +
+                '<span class="item-pad-title">' + lap_length + '</span>'
             : itemPadType.innerHTML = 
-                '<span class="item-pad-title glowing-text-dark type-title">' + total_distance + '</span>' +
-                '<span class="item-pad-title glowing-text-dark type-title">' + Math.ceil(parseInt(item.total_distance) / parseInt(item.lap_length)) + ' x ' + lap_length + '</span>';
+                '<span class="item-pad-title glowing-text-dark">' + total_distance + '</span>' +
+                '<span class="item-pad-title">' + Math.ceil(parseInt(item.total_distance) / parseInt(item.lap_length)) + ' x ' + lap_length + '</span>';
 
             return itemPadType;
 
@@ -29,7 +29,7 @@ export const render = (itemType, item, route) => {
             itemPadSession.setAttribute('class', 'item-pad');
             itemPadSession.setAttribute('href', route);
             itemPadSession.innerHTML = 
-            '<span class="item-pad-title type-title"><span class="glowing-text-dark">SESSION ' + item.id + '</span></span>' +
+            '<span class="item-pad-title"><span class="glowing-text-dark">SESSION ' + item.id + '</span></span>' +
             '<span class="item-pad-title session-title"><span>Total : </span><span>' + total_time + '</span></span>' +
                 '<span class="item-pad-title session-title"><span>Moyen : </span><span>' + average_time + '</span></span>' +
                 '<span class="item-pad-title session-title"><span>Meilleur : </span><span>' + best_time + '</span></span>';
@@ -43,7 +43,7 @@ export const render = (itemType, item, route) => {
             itemPadSessionSprint.setAttribute('class', 'item-pad');
             itemPadSessionSprint.setAttribute('href', route);
             itemPadSessionSprint.innerHTML = 
-            '<span class="item-pad-title type-title"><span class="glowing-text-dark">SESSION ' + item.id + '<br>' + total_time_sprint + '</span></span>';
+            '<span class="item-pad-title"><span class="glowing-text-dark">SESSION ' + item.id + '<br>' + total_time_sprint + '</span></span>';
 
             return itemPadSessionSprint;
 
@@ -52,8 +52,8 @@ export const render = (itemType, item, route) => {
             itemPadBlank.setAttribute('class', 'item-pad');
             itemPadBlank.setAttribute('href', route);
             itemPadBlank.innerHTML = 
-            '<span class="item-pad-title session-title"><span></span><span>VIDE</span><span></span></span>' +
-            '<span class="item-pad-title type-title"><span class="glowing-text-dark">+</span></span>';
+            '<span class="item-pad-title session-title"><span></span><span>AJOUTER</span><span></span></span>' +
+            '<span class="item-pad-title"><span class="glowing-text-dark">+</span></span>';
 
             return itemPadBlank;
     

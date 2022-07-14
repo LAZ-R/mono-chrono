@@ -110,7 +110,6 @@ export const addType = (typeToAdd) => {
         tmpArray.push(type);
     });
     tmpArray.push(typeToAdd);
-    console.log('tmp type array : ' + tmpArray);
     User.types = tmpArray;
     STORAGE.setItem('monoChronoUser', JSON.stringify(User));
 }
@@ -181,6 +180,17 @@ export const getSessionsByType = (typeId) => {
     return sessionsToReturn;
 }
 
+export const getSessionsLatestId = () => {
+    let idReturn = 0;
+    const User = JSON.parse(STORAGE.getItem('monoChronoUser'));
+
+    User.sessions.forEach(session => {
+        idReturn = session.id;
+    });
+
+    return idReturn;
+}
+
 export const addSession = (sessionToAdd) => {
     let User = JSON.parse(STORAGE.getItem('monoChronoUser'));
     let tmpArray = [];
@@ -189,6 +199,16 @@ export const addSession = (sessionToAdd) => {
     });
     tmpArray.push(sessionToAdd);
     User.sessions = tmpArray;
+    STORAGE.setItem('monoChronoUser', JSON.stringify(User));
+}
+
+export const updateSession = (sessionToUpdate) => {
+    let User = JSON.parse(STORAGE.getItem('monoChronoUser'));
+    User.sessions.forEach(session => {
+        if (session.id == sessionToUpdate.id) {
+            session.laps = sessionToUpdate.laps;
+        }
+    });
     STORAGE.setItem('monoChronoUser', JSON.stringify(User));
 }
 

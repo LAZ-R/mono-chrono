@@ -10,7 +10,6 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    background-color: var(--gray-10);
     padding: var(--horizontal-padding) var(--horizontal-padding);
 }
 
