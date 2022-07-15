@@ -17,6 +17,7 @@ export const checkFirstTime = () => {
             sessions: [{
                 id: 1,
                 type: 1,
+                date: '10/07/2022',
                 laps:[
                     {  id:  1, time: 75.95 },
                     {  id:  2, time: 75.65 },
@@ -60,6 +61,7 @@ export const checkFirstTime = () => {
         let session2 = {
             id: 2,
             type: 2,
+            date: new Date(Date.now()).toLocaleDateString(),
             laps:[
                 {  id:  1, time: 9144.89 }
             ],

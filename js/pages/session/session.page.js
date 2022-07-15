@@ -56,7 +56,7 @@ const createLap = () => {
     
         updateLapsDisplay();
         const button = document.getElementById('lapButton');
-        current_lap == total_laps ? button.innerHTML = 'FIN' : button.innerHTML = 'TOUR ' + current_lap ;
+        current_lap == total_laps ? button.innerHTML = 'DERNIER<br>TOUR' : button.innerHTML = '<span class="glowing-text-bright">TOUR ' + current_lap + '</span>' ;
     }
 }
 
@@ -66,9 +66,9 @@ const updateLapsDisplay = () => {
     const laps = SESSION.laps;
     laps.slice().reverse().forEach(lap => {
         const span = document.createElement('span');
-        span.setAttribute('class', 'top-tab-row-session');
+        span.setAttribute('class', 'array-row');
         span.innerHTML =
-        '<span><b>Tour ' + lap.id + '</b></span>' + UTILS.secondsToFormatedTimeString(lap.time) + '<span></span>';
+        '<b>Tour ' + lap.id + '</b><span>' + UTILS.secondsToFormatedTimeString(lap.time) + '<span>';
         topTab.appendChild(span);
     });
 }
@@ -103,7 +103,7 @@ const renderView = () => {
     lapsContainer.setAttribute('class', 'laps-container');
     lapsContainer.innerHTML =
         '<b>Tours précédents</b>' +
-        '<div class="top-tab-session" id="topTab"></div>';
+        '<div class="array" id="topTab"></div>';
 
     const lapsContainerShadow = document.createElement('div');
     lapsContainerShadow.setAttribute('id', 'lapsContainerShadow');
@@ -129,7 +129,7 @@ const renderView = () => {
     goButton.setAttribute('id', 'goButton');
     goButton.setAttribute('class', 'primary-button no-border-button lap-button');
     goButton.innerHTML =
-        'GO';
+        '<span class="glowing-text-bright">GO</span>';
     goButton.addEventListener('click', () => {
         current_lap = 1;
         incrementTotalTime();
@@ -138,7 +138,7 @@ const renderView = () => {
         const lapButton = document.createElement('button');
         lapButton.setAttribute('id', 'lapButton');
         lapButton.setAttribute('class', 'primary-button no-border-button lap-button');
-        IS_SPRINT ? lapButton.innerHTML = 'FIN' : lapButton.innerHTML = 'TOUR ' + current_lap;
+        IS_SPRINT ? lapButton.innerHTML = '<span class="glowing-text-bright">FIN</span>' : lapButton.innerHTML = '<span class="glowing-text-bright">TOUR ' + current_lap + '</span>';
         lapButton.addEventListener('click', () => {
             createLap();
         });
@@ -159,6 +159,39 @@ const session = SERVICE_STORAGE.getSessionByID(globalSessionId);
 if (session.laps.length != 0) {
     window.location = './previousSessions.html?session=' + session.id;
 } else {
-    COMPONENT_HEADER.render('index');
-    renderView();
+    // Keep screen on
+
+    // initialization : wake lock sentinel
+    let wakeLock = null;
+
+    if ('wakeLock' in navigator) {
+        console.log("// Screen Wake Lock API supported 🎉");
+    }
+
+    /**
+     * Request the screen to stay awake
+     */
+    const requestWakeLock = async () => {
+        console.log('wakeLock requested');
+        try {
+            // initialization : wake lock sentinel
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', () => {
+                console.log('Screen Wake Lock released:', wakeLock.released);
+            });
+            console.log('Screen Wake Lock released:', wakeLock.released);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    document.addEventListener('visibilitychange', async () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') {
+        wakeLock = await navigator.wakeLock.request('screen');
+        }
+    });
+
+    requestWakeLock()
+    .then(COMPONENT_HEADER.render('index'))
+    .then(renderView());
 }

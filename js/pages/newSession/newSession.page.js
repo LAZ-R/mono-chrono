@@ -71,12 +71,13 @@ const renderView = () => {
         const newSession = {
             id: newID,
             type: finalTypeID,
-                laps:[],
-                total_time: null,
-                average_time: null,
-                average_speed: null,
-                best_time: null,
-                best_speed: null
+            date: new Date(Date.now()).toLocaleDateString(),
+            laps:[],
+            total_time: null,
+            average_time: null,
+            average_speed: null,
+            best_time: null,
+            best_speed: null
         };
 
         SERVICE_STORAGE.addSession(newSession);

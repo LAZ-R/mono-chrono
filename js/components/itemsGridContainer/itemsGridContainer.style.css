@@ -10,6 +10,8 @@
     justify-items: center;
     align-items: center;
     background-color: var(--gray-10);
+    height: 82vh;
+    overflow: scroll;
 }
 
 /* ==========================

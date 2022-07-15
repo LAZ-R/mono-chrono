@@ -20,22 +20,24 @@ const renderView = () => {
     const types = SERVICE_STORAGE.getTypes();
     const previousSessions = SERVICE_STORAGE.getSessions();
     topContent.innerHTML =
-        '<div class="top-tab">' +
-            '<span class="top-tab-row"><span>Types de session</span><span>' + types.length + '</span></span>' +
-            '<span class="top-tab-row"><span>Sessions précédentes</span><span>' + previousSessions.length + '</span></span>' +
+        '<div class="array">' +
+            '<span class="array-row"><span>Types de session</span><span>' + types.length + '</span></span>' +
+            '<span class="array-row"><span >Sessions précedentes</span><span>' + previousSessions.length + '</span></span>' +
         '</div>'
+
+    
+        page.appendChild(topContent);
 
     const previousSessionsButton = document.createElement('button');
     previousSessionsButton.setAttribute('id', 'previousSessionsButton');
-    previousSessionsButton.setAttribute('class', '');
-    previousSessionsButton.innerHTML = 'Sessions précedentes';
+    previousSessionsButton.setAttribute('class', 'no-border-button history-button');
+    previousSessionsButton.innerHTML = '<span class="glowing-text-bright">HISTORIQUE</span>';
     previousSessionsButton.addEventListener('click', () => {
         window.open('./previousSessions.html', '_self');
     });
 
-    topContent.appendChild(previousSessionsButton);
+    page.appendChild(previousSessionsButton);
 
-    page.appendChild(topContent);
 
     const newType = document.createElement('button');
     newType.setAttribute('id', 'newType');

@@ -7,32 +7,25 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: var(--horizontal-padding) var(--horizontal-padding);
-    height: 33vh;
+    height: 16vh;
     background-color: var(--gray-70);
     color: white;
 }
 
-.top-tab {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    width: 100%;
-}
 
-.top-tab-row {
+
+.history-button {
     box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 5px;
+    height: 17vh;
+    background-color: var(--gray-80);
+    color: var(--primary);
 }
+    .history-button:hover {
+        background-color: var(--gray-90);
+    }
 
 .new-type-button {
     box-sizing: border-box;

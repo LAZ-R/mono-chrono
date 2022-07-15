@@ -29,7 +29,7 @@ export const render = (itemType, item, route) => {
             itemPadSession.setAttribute('class', 'item-pad');
             itemPadSession.setAttribute('href', route);
             itemPadSession.innerHTML = 
-            '<span class="item-pad-title"><span class="glowing-text-dark">SESSION ' + item.id + '</span></span>' +
+            '<span class="item-pad-title"><span class="glowing-text-dark">' + item.date + '</span></span>' +
             '<span class="item-pad-title session-title"><span>Total : </span><span>' + total_time + '</span></span>' +
                 '<span class="item-pad-title session-title"><span>Moyen : </span><span>' + average_time + '</span></span>' +
                 '<span class="item-pad-title session-title"><span>Meilleur : </span><span>' + best_time + '</span></span>';
@@ -43,7 +43,8 @@ export const render = (itemType, item, route) => {
             itemPadSessionSprint.setAttribute('class', 'item-pad');
             itemPadSessionSprint.setAttribute('href', route);
             itemPadSessionSprint.innerHTML = 
-            '<span class="item-pad-title"><span class="glowing-text-dark">SESSION ' + item.id + '<br>' + total_time_sprint + '</span></span>';
+            '<span class="item-pad-title"><span class="glowing-text-dark">' + item.date + '</span></span>' +
+            '<span class="item-pad-title session-title"><span></span><span>' + total_time_sprint + '</span><span></span></span>';
 
             return itemPadSessionSprint;
 

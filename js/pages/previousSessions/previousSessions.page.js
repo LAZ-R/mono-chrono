@@ -21,8 +21,12 @@ const renderView = () => {
     if (typeId == null && sessionId == null) {
         pageTitle = 'Types';
         SERVICE_PWA.setHTMLTitle(pageTitle);
-        page.appendChild(document.createElement('h1')).innerHTML =
-            pageTitle;
+
+        const topTitleArea = document.createElement('div');
+        topTitleArea.setAttribute('id', 'topTitleArea');
+        topTitleArea.setAttribute('class', 'top-title-area');
+        topTitleArea.innerHTML = pageTitle;
+        page.appendChild(topTitleArea)
 
         const itemsGridContainer = COMPONENT_ITEMS_GRID_CONTAINER.render();
         page.appendChild(itemsGridContainer);
@@ -48,8 +52,11 @@ const renderView = () => {
         }
         
         SERVICE_PWA.setHTMLTitle(pageTitle);
-        page.appendChild(document.createElement('h1')).innerHTML =
-            pageTitle;
+        const topTitleArea = document.createElement('div');
+        topTitleArea.setAttribute('id', 'topTitleArea');
+        topTitleArea.setAttribute('class', 'top-title-area');
+        topTitleArea.innerHTML = pageTitle;
+        page.appendChild(topTitleArea)
 
         const itemsGridContainer = COMPONENT_ITEMS_GRID_CONTAINER.render();
         page.appendChild(itemsGridContainer);
@@ -67,65 +74,100 @@ const renderView = () => {
 
 
     } else if (typeId == null && sessionId != null) {
-        pageTitle = 'Session ' + sessionId;
-        SERVICE_PWA.setHTMLTitle(pageTitle);
-        
-        page.appendChild(document.createElement('h1')).innerHTML =
-            pageTitle;
-
         const session = SERVICE_STORAGE.getSessionByID(sessionId);
         const TYPE = SERVICE_STORAGE.getTypeById(session.type);
 
+        pageTitle = session.date;
+        SERVICE_PWA.setHTMLTitle(pageTitle);
+        
+        const topTitleArea = document.createElement('div');
+        topTitleArea.setAttribute('id', 'topTitleArea');
+        topTitleArea.setAttribute('class', 'top-title-area');
+        topTitleArea.innerHTML = pageTitle;
+        page.appendChild(topTitleArea)
+
         let total_distance = UTILS.getStringFromDistance(TYPE.total_distance);
+        let lap_length;
         let total_time = UTILS.secondsToFormatedTimeString(session.total_time);
         let average_time = UTILS.secondsToFormatedTimeString(session.average_time);
         let best_time = UTILS.secondsToFormatedTimeString(session.best_time);
 
         const IS_SPRINT = UTILS.isSprint(TYPE);
 
+
+        const bottomArea = document.createElement('div');
+            bottomArea.setAttribute('id', 'bottomArea');
+            bottomArea.setAttribute('class', 'bottom-area');
+
         if (IS_SPRINT) {
-            page.appendChild(document.createElement('div')).innerHTML =
-            '<div class="top-tab-session">' +
-                '<span class="top-tab-row-session"><span><b>Type</b></span><span></span></span>' +
-                '<span class="top-tab-row-session"><span>Distance totale</span><span>' + total_distance + '</span></span>' +
-                '<span class="top-tab-row-session"><span>Sprint</span><span></span></span>' +
-                '<div class="top-tab-separator"></div>' +
-                '<span class="top-tab-row-session"><span><b>Session</b></span><span></span></span>' +
-                '<span class="top-tab-row-session"><span>Temps total</span><span>' + total_time + '</span></span>' +
-                '<div class="top-tab-separator"></div>' +
-                '<span class="top-tab-row-session"><span>Vitesse moyenne</span><span>' + session.average_speed + ' km/h</span></span>' +
+            lap_length = 'Sprint';
+            bottomArea.innerHTML =
+            '<div class="type-area">' +
+                '<span>' + total_distance + ' | ' + lap_length + '</span>' +
+            '</div>' +
+            '<div class="total-time-area">' +
+                    '<span>' + total_time + '</span>' +
+            '</div>' +
+            '<div class="all-speed-area">' +
+                '<div class="speed-area average-color">' +
+                    '<img src="./images/gauge-simple.svg" alt="Compteur de vitesse avec l\'aiguille au centre" class="stats-icon">' +
+                    '<span>' + session.average_speed + ' km/h</span>' +
+                '</div>' +
             '</div>';
+            page.appendChild(bottomArea);
         } else {
-            page.appendChild(document.createElement('div')).innerHTML =
-            '<div class="top-tab-session">' +
-                '<span class="top-tab-row-session"><span><b>Type</b></span><span></span></span>' +
-                '<span class="top-tab-row-session"><span>Distance totale</span><span>' + total_distance + '</span></span>' +
-                '<span class="top-tab-row-session"><span>Nombre de tours</span><span>' + session.laps.length + '</span></span>' +
-                '<span class="top-tab-row-session"><span>Longueur du tour</span><span>' + TYPE.lap_length + ' m</span></span>' +
-                '<div class="top-tab-separator"></div>' +
-                '<span class="top-tab-row-session"><span><b>Session</b></span><span></span></span>' +
-                '<span class="top-tab-row-session"><span>Temps total</span><span>' + total_time + '</span></span>' +
-                '<span class="top-tab-row-session"><span>Temps moyen</span><span>' + average_time + '</span></span>' +
-                '<span class="top-tab-row-session"><span>Meilleur temps</span><span>' + best_time + '</span></span>' +
-                '<div class="top-tab-separator"></div>' +
-                '<span class="top-tab-row-session"><span>Vitesse moyenne</span><span>' + session.average_speed + ' km/h</span></span>' +
-                '<span class="top-tab-row-session"><span>Meilleur vitesse</span><span>' + session.best_speed + ' km/h</span></span>' +
+            lap_length = UTILS.getStringFromDistance(TYPE.lap_length);
+            bottomArea.innerHTML =
+            '<div class="type-area">' +
+                '<span>' + total_distance + ' | ' + Math.ceil(parseInt(TYPE.total_distance) / parseInt(TYPE.lap_length)) + ' x ' + lap_length + '</span>' +
+            '</div>' +
+            '<div class="total-time-area">' +
+                    '<span>' + total_time + '</span>' +
+            '</div>' +
+            '<div class="times-area">' +
+                '<div class="time-area average-color">' +
+                    '<span>Tour moyen</span>' +
+                    '<span>' + average_time + '</span>' +
+                '</div>' +
+                '<div class="time-area best-color">' +
+                    '<span>Meilleur Tour</span>' +
+                    '<span>' + best_time + '</span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="all-speed-area">' +
+                '<div class="speed-area average-color">' +
+                    '<img src="./images/gauge-simple.svg" alt="Compteur de vitesse avec l\'aiguille au centre" class="stats-icon">' +
+                    '<span>' + session.average_speed + ' km/h</span>' +
+                '</div>' +
+                '<div class="speed-area best-color">' +
+                '<img src="./images/gauge-simple-high.svg" alt="Compteur de vitesse avec l\'aiguille à droite" class="stats-icon">' +
+                    '<span>' + session.best_speed + ' km/h</span>' +
+                '</div>' +
             '</div>';
-        page.appendChild(document.createElement('h1')).innerHTML =
-            'Tours';
-        const lapsArea = document.createElement('div');
-        lapsArea.setAttribute('class', 'top-tab-session');
 
-        session.laps.forEach(lap => {
-            const row = document.createElement('span');
-            row.setAttribute('class', 'top-tab-row-session');
-            row.innerHTML =
-                '<span>Tour ' + lap.id + '</span><span>' + UTILS.secondsToFormatedTimeString(lap.time) + '</span>'
+            const lapsArea = document.createElement('div');
+            lapsArea.setAttribute('class', 'laps-area');
+            //lapsArea.innerHTML = '<b>Tours</b>'
+            
+            const lapsArray = document.createElement('div');
+            lapsArray.setAttribute('class', 'array');
 
-            lapsArea.appendChild(row); 
-        });
+            session.laps.forEach(lap => {
+                const row = document.createElement('span');
+                row.setAttribute('class', 'array-row session-special-row');
+                row.innerHTML =
+                    '<span>Tour ' + lap.id + '</span><span>' + UTILS.secondsToFormatedTimeString(lap.time) + '</span>'
 
-        page.appendChild(lapsArea);
+                lapsArray.appendChild(row); 
+            });
+
+            lapsArea.appendChild(lapsArray);
+
+            bottomArea.appendChild(lapsArea);
+
+            
+
+            page.appendChild(bottomArea);
 
         }
     }
