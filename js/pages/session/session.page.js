@@ -3,6 +3,9 @@ import * as SERVICE_STORAGE from '../../services/storage.service.js';
 import * as UTILS from '../../services/utils.service.js';
 import * as COMPONENT_HEADER from "../../components/header/header.component.js";
 
+const threeLapsToGoSound = new Audio('./audio/3lapsToGo.mp3');
+const endSound = new Audio('./audio/end.mp3');
+
 let SESSION = SERVICE_STORAGE.getSessionByID(new URLSearchParams(window.location.search).get('id'));
 const TYPE = SERVICE_STORAGE.getTypeById(SESSION.type);
 const IS_SPRINT = UTILS.isSprint(TYPE);
@@ -35,6 +38,8 @@ const incrementTotalTime = () => {
 }
 
 const createLap = () => {
+    
+    
     const lapTime = UTILS.roundTo(totalTime / 100, 2);
     totalTime = 0;
 
@@ -48,15 +53,26 @@ const createLap = () => {
 
 
     if (current_lap == total_laps) {
-        window.location = './previousSessions.html?session=' + session.id;
+        endSound.play();
+        document.getElementById('page').innerHTML = '';
+        setTimeout(() => {
+            window.location = './previousSessions.html?session=' + session.id;            
+        }, 2000);
     } else {
         current_lap += 1;
+
+        if (total_laps > 5 && current_lap == total_laps - 2) {
+            threeLapsToGoSound.play();
+        } else {
+            let lapSound = new Audio('./audio/lap.mp3');
+            lapSound.play();
+        }
 
         SESSION = SERVICE_STORAGE.getSessionByID(new URLSearchParams(window.location.search).get('id'));
     
         updateLapsDisplay();
         const button = document.getElementById('lapButton');
-        current_lap == total_laps ? button.innerHTML = 'DERNIER<br>TOUR' : button.innerHTML = '<span class="glowing-text-bright">TOUR ' + current_lap + '</span>' ;
+        button.innerHTML = current_lap == total_laps ? 'DERNIER<br>TOUR' : '<span class="glowing-text-bright">TOUR ' + current_lap + '</span>' ;
     }
 }
 

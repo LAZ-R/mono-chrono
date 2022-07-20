@@ -152,14 +152,29 @@ const renderView = () => {
             const lapsArray = document.createElement('div');
             lapsArray.setAttribute('class', 'array');
 
-            session.laps.forEach(lap => {
+            for (let index = 0; index < session.laps.length; index++) {
+                const lap = session.laps[index];
+
+                let differenceSpan = '';
+                if (index == 0) {
+                    differenceSpan = '<span class="session-special-span"></span>';
+                } else {
+                    const previousTime = session.laps[index - 1].time;
+                    if (lap.time + 0.3 < previousTime) {
+                        differenceSpan = '<span class="session-special-span better-lap">▼</span>';
+                    } else if (lap.time - 0.3 > previousTime) {
+                        differenceSpan = '<span class="session-special-span worst-lap">▲</span>';
+                    } else {
+                        differenceSpan = '<span class="session-special-span same-lap">═</span>';
+                    }
+                }
                 const row = document.createElement('span');
                 row.setAttribute('class', 'array-row session-special-row');
                 row.innerHTML =
-                    '<span>Tour ' + lap.id + '</span><span>' + UTILS.secondsToFormatedTimeString(lap.time) + '</span>'
+                    '<span class="session-special-span">Tour ' + lap.id + '</span>' + differenceSpan + '<span class="session-special-span">' + UTILS.secondsToFormatedTimeString(lap.time) + '</span>'
 
-                lapsArray.appendChild(row); 
-            });
+                lapsArray.appendChild(row);                
+            }
 
             lapsArea.appendChild(lapsArray);
 

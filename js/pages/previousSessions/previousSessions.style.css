@@ -152,3 +152,29 @@
 .session-special-row span:last-child {
     font: 900 28px "Roboto-Regular", sans-serif;
 }
+
+.session-special-span {
+    width: 100%;
+    white-space: nowrap;
+}
+
+.better-lap {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    color: #227519;
+}
+
+.same-lap {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    color: #af6606;
+}
+
+.worst-lap {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    color: #792727;
+}
